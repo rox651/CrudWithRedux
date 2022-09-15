@@ -5,19 +5,11 @@ export const crudSlice = createSlice({
     data: [
       {
         id: 123123,
-        username: "Homero",
-        email: "homerojose69@gmail.com",
+        username: "Usuario1",
+        email: "usuario69@gmail.com",
         state: "Activo",
         type: "admin",
         select: false,
-      },
-      {
-        id: 12123,
-        username: "Homero",
-        email: "homerojose69@gmail.com",
-        state: "Activo",
-        type: "admin",
-        select: true,
       },
     ],
     isOpenForm: false,
@@ -30,16 +22,14 @@ export const crudSlice = createSlice({
       state.data.push(payload);
     },
     removeData: (state, { payload = "" }) => {
-      state.data = state.data.filter((user) => user.id !== payload);
+      const confirmRemove = confirm(`Desea eliminar este usuario?`);
+
+      if (confirmRemove) state.data = state.data.filter((user) => user.id !== payload);
     },
     removeSelectData: (state) => {
-      const confirmRemove = confirm(
-        "Deseas eliminar los usuarios seleccionados?"
-      );
+      const confirmRemove = confirm("Deseas eliminar los usuarios seleccionados?");
 
-      if (confirmRemove) {
-        state.data = state.data.filter((user) => user.select !== true);
-      }
+      if (confirmRemove) state.data = state.data.filter((user) => user.select !== true);
     },
     setCheck: (state, { payload }) => {
       state.data = state.data.map((user) => {
@@ -62,12 +52,4 @@ export const crudSlice = createSlice({
     },
   },
 });
-export const {
-  addData,
-  removeData,
-  editData,
-  openForm,
-  setUserEdit,
-  removeSelectData,
-  setCheck,
-} = crudSlice.actions;
+export const { addData, removeData, editData, openForm, setUserEdit, removeSelectData, setCheck } = crudSlice.actions;

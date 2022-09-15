@@ -1,14 +1,8 @@
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 
-import {
-  openForm,
-  addData,
-  setUserEdit,
-  editData,
-} from "../store/slices/CRUD/";
+import { openForm, addData, setUserEdit, editData } from "../store/slices/CRUD";
 
 export const useFormCrud = () => {
   //redux
@@ -16,7 +10,7 @@ export const useFormCrud = () => {
   const dispatch = useDispatch();
 
   //form
-  let initialUser = {
+  const initialUser = {
     username: "",
     state: "Activo",
     email: "",
@@ -29,23 +23,25 @@ export const useFormCrud = () => {
 
   const [user, setUser] = useState(initialUser);
 
+  //condition
+  const isUserNull = userEdit.id !== null;
+
   //functions
 
   useEffect(() => {
-    if (userEdit.id !== null) {
-      console.log(userEdit);
+    if (isUserNull) {
       userName.current.value = userEdit.username;
       email.current.value = userEdit.email;
     }
   }, [userEdit]);
 
   const onHandleChange = (e) => {
-    if (userEdit.id !== null) {
+    if (isUserNull) {
       dispatch(
         setUserEdit({
           ...userEdit,
           [e.target.name]: e.target.value,
-        })
+        }),
       );
       return;
     }
@@ -57,20 +53,16 @@ export const useFormCrud = () => {
 
   const onSubmitForm = (e) => {
     e.preventDefault();
-    if ([userName.current.value, email.current.value].includes("")) {
+    const isEmpty = [userName.current.value, email.current.value].includes("");
+
+    if (isEmpty) {
       alert("Completa todos los campos");
       return;
     }
 
-    if (userEdit.id !== null) {
+    if (isUserNull) {
       dispatch(editData(userEdit));
-      dispatch(
-        setUserEdit({
-          id: null,
-        })
-      );
-      dispatch(openForm());
-      form.current.reset();
+      closeForm();
       return;
     }
 
@@ -78,19 +70,21 @@ export const useFormCrud = () => {
       addData({
         id: uuid(),
         ...user,
-      })
+      }),
     );
     setUser(initialUser);
-    dispatch(openForm());
-    form.current.reset();
+    closeForm();
   };
 
   const closeForm = () => {
-    dispatch(
-      setUserEdit({
-        id: null,
-      })
-    );
+    if (isUserNull) {
+      dispatch(
+        setUserEdit({
+          id: null,
+        }),
+      );
+    }
+
     dispatch(openForm());
     form.current.reset();
   };

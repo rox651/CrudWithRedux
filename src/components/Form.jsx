@@ -1,27 +1,17 @@
 import { useSelector } from "react-redux";
-import { useFormCrud } from "../hooks/useFormCrud";
-
 import { clsx } from "clsx";
 import { GrClose } from "react-icons/gr";
+
+import { useFormCrud } from "../hooks/useFormCrud";
 
 export const Form = () => {
   //redux
   const { isOpenForm, userEdit } = useSelector((state) => state.crud);
-  const { form, userName, email, onSubmitForm, onHandleChange, closeForm } =
-    useFormCrud();
+  const { form, userName, email, onSubmitForm, onHandleChange, closeForm } = useFormCrud();
 
   return (
-    <div
-      className={clsx(
-        isOpenForm ? "grid" : "hidden",
-        "absolute w-full h-screen bg-[#1f293770] place-items-center"
-      )}
-    >
-      <form
-        className="bg-white h-[350px] w-[350px] relative p-10"
-        onSubmit={onSubmitForm}
-        ref={form}
-      >
+    <div className={clsx(isOpenForm ? "grid" : "hidden", "absolute w-full h-screen bg-[#1f293770] place-items-center")}>
+      <form className="bg-white h-[350px] w-[350px] relative p-10" onSubmit={onSubmitForm} ref={form}>
         <header className="flex justify-between items-center">
           <h2 className="text-slate-600 text-2xl font-bold">Formulario</h2>
           <GrClose className=" cursor-pointer" onClick={closeForm} />
