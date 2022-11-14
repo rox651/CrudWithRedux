@@ -1,7 +1,10 @@
+import "react-toastify/dist/ReactToastify.css";
+  
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { BiCheckbox, BiCheckboxChecked } from "react-icons/bi";
 
-import { openForm, removeData, setUserEdit, setCheck } from "../store/slices/CRUD";
+import { openForm, removeData, setUserEdit, setCheck } from "../../store/slices/CRUD";
 
 export const User = ({ user }) => {
   const { username, state, type, email, id, select } = user;
@@ -11,7 +14,10 @@ export const User = ({ user }) => {
 
   return (
     <tr className="border-b">
-      <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => dispatch(setCheck(id))}>
+      <td
+        className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap cursor-pointer"
+        onClick={() => dispatch(setCheck(id))}
+      >
         {checkBox}
       </td>
       <td className="text-sm text-gray-900 px-6 py-4 whitespace-nowrap font-bold capitalize">{username}</td>
@@ -31,6 +37,7 @@ export const User = ({ user }) => {
         <button
           onClick={() => {
             dispatch(removeData(id));
+            toast.done("Usuario eliminado");
           }}
           className="text-red-500 font-black"
         >

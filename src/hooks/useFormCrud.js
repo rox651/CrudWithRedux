@@ -1,5 +1,8 @@
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import { openForm, addData, setUserEdit, editData } from "../store/slices/CRUD";
@@ -26,8 +29,6 @@ export const useFormCrud = (initialForm = {}) => {
   const onInputChange = ({ target }) => {
     const { name, value } = target;
 
-    console.log(value);
-
     if (isUserNull) {
       dispatch(
         setUserEdit({
@@ -44,12 +45,12 @@ export const useFormCrud = (initialForm = {}) => {
     });
   };
 
-  const onResetForm = (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
     const isEmpty = [formState.username, formState.email].includes("");
 
     if (isEmpty) {
-      alert("Completa todos los campos");
+      toast.warning("Completa todos los campos");
       return;
     }
 
@@ -64,7 +65,7 @@ export const useFormCrud = (initialForm = {}) => {
         ...formState,
       }),
     );
-    setFormState(initialForm);
+    onResetForm();
     closeForm();
   };
 
@@ -78,6 +79,10 @@ export const useFormCrud = (initialForm = {}) => {
     }
 
     dispatch(openForm());
+    onResetForm();
+  };
+
+  const onResetForm = () => {
     setFormState(initialForm);
   };
 
@@ -85,6 +90,7 @@ export const useFormCrud = (initialForm = {}) => {
     ...formState,
     formState,
     onInputChange,
+    onSubmitForm,
     onResetForm,
     closeForm,
   };
